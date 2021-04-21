@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Back
     uniqueID: 616111171
+    locked: 0
+  - name: Entity
+    uniqueID: 2743358231
     locked: 0
   - name: Fore
     uniqueID: 2703272783
