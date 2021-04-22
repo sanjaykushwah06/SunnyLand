@@ -1,21 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class PlayerController : MonoBehaviour
 {
-    //     float someNumber = 1.5f;
-    //     int someholeNumber = 2;
-    //     string babble = "Hello friends";
-    //     bool fact = true;
 
     private Rigidbody2D rb;
-    [SerializeField]
+    private Collider2D coli;
     private Animator anim;
+
+    public int cherries = 0;
+
+
     private enum State { idle, running, jumping, falling }
     private State state = State.idle;
-    private Collider2D coli;
+
+
     [SerializeField] private LayerMask ground;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpforce = 10f;
+    [SerializeField] private Text CherryText;
+
 
 
     private void Start()
@@ -25,49 +32,59 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         coli = GetComponent<Collider2D>();
     }
+
+
+
     private void Update()
+    {
+        Movement();
+        AnimationState();
+        anim.SetInteger("state", (int)state);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Collectable")
+        {
+            Destroy(collision.gameObject);
+            cherries += 1;
+            CherryText.text = cherries.ToString();
+        }
+
+    }
+
+    private void Movement()
     {
         float hDirection = Input.GetAxis("Horizontal");
 
 
-        // if (Input.GetKey(KeyCode.A))
+        // moving left
         if (hDirection < 0)
         {
-            rb.velocity = new Vector2(-5, rb.velocity.y);
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
             transform.localScale = new Vector2(-1, 1);
-            // anim.SetBool("running", true);
         }
 
-        // if (Input.GetKey(KeyCode.D))
+        // moving right
         if (hDirection > 0)
         {
-            rb.velocity = new Vector2(5, rb.velocity.y);
+            rb.velocity = new Vector2(speed, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
-            // anim.SetBool("running", true);
-
         }
 
-        else
-        {
-            // anim.SetBool("running", false);
-
-        }
-
+        // jumping
         if (Input.GetButtonDown("Jump") && coli.IsTouchingLayers(ground))
         {
-            rb.velocity = new Vector2(rb.velocity.x, 8f);
+            rb.velocity = new Vector2(rb.velocity.x, jumpforce);
             state = State.jumping;
         }
-
-        velocityState();
-        anim.SetInteger("state", (int)state);
     }
 
-    private void velocityState()
+    private void AnimationState()
     {
         if (state == State.jumping)
         {
-
             if (rb.velocity.y < .1f)
             {
                 state = State.falling;
@@ -91,20 +108,6 @@ public class PlayerController : MonoBehaviour
             state = State.idle;
         }
     }
-
-
-
-
-    // private void  Start()
-    // {
-
-    //     if(fact == true)
-    //     {
-    //         print(babble + "someNumber: " + someNumber.ToString() + "someholeNumber: " + someholeNumber.ToString() );
-    //     }
-    // }
-
-
 
 
 }
