@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+// Class represent to Entity like your player 
 public class PlayerController : MonoBehaviour
 {
 
     private Rigidbody2D rb;
     private Collider2D coli;
     private Animator anim;
-
     public int cherries = 0;
 
 
@@ -28,7 +27,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coli = GetComponent<Collider2D>();
@@ -41,7 +39,6 @@ public class PlayerController : MonoBehaviour
         if (state != State.hurt)
         {
             Movement();
-
         }
         AnimationState();
         anim.SetInteger("state", (int)state);
@@ -56,7 +53,6 @@ public class PlayerController : MonoBehaviour
             cherries += 1;
             CherryText.text = cherries.ToString();
         }
-
     }
 
 
@@ -93,7 +89,6 @@ public class PlayerController : MonoBehaviour
     private void Movement()
     {
         float hDirection = Input.GetAxis("Horizontal");
-
 
         // moving left
         if (hDirection < 0)

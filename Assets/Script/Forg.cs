@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Class represent to Enemy like your Forg 
+
 public class Forg : MonoBehaviour
 {
 
