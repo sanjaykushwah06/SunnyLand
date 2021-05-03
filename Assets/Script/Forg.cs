@@ -4,7 +4,7 @@ using UnityEngine;
 
 // Class represent to Enemy like your Forg 
 
-public class Forg : MonoBehaviour
+public class Forg : Enemy
 {
 
     [SerializeField] private float leftcap;
@@ -22,13 +22,39 @@ public class Forg : MonoBehaviour
 
 
 
-    private void Start()
+
+    protected override void Start()
     {
+        base.Start();
         coli = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
+    {
+
+
+        // transition from jump to fall
+        if (anim.GetBool("Jumping"))
+        {
+            if (rb.velocity.y < .1)
+            {
+                anim.SetBool("Falling", true);
+                anim.SetBool("Jumping", false);
+
+            }
+        }
+
+        // trasition from fall to Idle
+        if (coli.IsTouchingLayers(ground) && anim.GetBool("Falling"))
+        {
+            anim.SetBool("Falling", false);
+
+        }
+
+    }
+
+    private void Move()
     {
 
         if (facingLeft)
@@ -50,6 +76,7 @@ public class Forg : MonoBehaviour
                 {
                     // jump
                     rb.velocity = new Vector2(-jumpLength, jumpHeight);
+                    anim.SetBool("Jumping", true);
                 }
 
             }
@@ -78,6 +105,8 @@ public class Forg : MonoBehaviour
                 {
                     // jump
                     rb.velocity = new Vector2(jumpLength, jumpHeight);
+                    anim.SetBool("Jumping", true);
+
                 }
 
             }
@@ -87,4 +116,6 @@ public class Forg : MonoBehaviour
             }
         }
     }
+
+
 }
