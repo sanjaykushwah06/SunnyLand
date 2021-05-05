@@ -17,7 +17,6 @@ public class Forg : Enemy
 
     private bool facingLeft = true;
     private Collider2D coli;
-    private Rigidbody2D rb;
 
 
 
@@ -27,7 +26,6 @@ public class Forg : Enemy
     {
         base.Start();
         coli = GetComponent<Collider2D>();
-        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()

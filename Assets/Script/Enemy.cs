@@ -6,11 +6,15 @@ public class Enemy : MonoBehaviour
 {
 
     protected Animator anim;
+    protected Rigidbody2D rb;
+
 
     protected virtual void Start()
     {
 
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+
 
     }
     public void JumpedOn()
@@ -18,6 +22,7 @@ public class Enemy : MonoBehaviour
         // Destroy(this.gameObject);
 
         anim.SetTrigger("Death");
+        rb.velocity = new Vector2(0, 0);
     }
 
     public void Death()
