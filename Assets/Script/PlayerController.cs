@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpforce = 10f;
     [SerializeField] private Text CherryText;
     [SerializeField] private float hurtforce = 10f;
+    [SerializeField] private AudioSource cherry;
+    [SerializeField] private AudioSource footstep;
 
 
 
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coli = GetComponent<Collider2D>();
+
     }
 
 
@@ -49,6 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.tag == "Collectable")
         {
+            cherry.Play();
             Destroy(collision.gameObject);
             cherries += 1;
             CherryText.text = cherries.ToString();
@@ -154,5 +158,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    private void FootStep()
+    {
+        footstep.Play();
+    }
 }
