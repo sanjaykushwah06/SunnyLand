@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 // Class represent to Entity like your player 
 public class PlayerController : MonoBehaviour
@@ -25,6 +26,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hurtforce = 10f;
     [SerializeField] private AudioSource cherry;
     [SerializeField] private AudioSource footstep;
+    [SerializeField] private int health;
+    [SerializeField] private Text healthAmount;
+
 
 
 
@@ -33,6 +37,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coli = GetComponent<Collider2D>();
+        healthAmount.text = health.ToString();
 
     }
 
@@ -58,6 +63,15 @@ public class PlayerController : MonoBehaviour
             cherries += 1;
             CherryText.text = cherries.ToString();
         }
+
+        if (collision.tag == "Powerup")
+        {
+            Destroy(collision.gameObject);
+            jumpforce = 12F;
+            GetComponent<SpriteRenderer>().color = Color.yellow;
+            StartCoroutine(ResetPower());
+
+        }
     }
 
 
@@ -76,6 +90,8 @@ public class PlayerController : MonoBehaviour
             else
             {
                 state = State.hurt;
+                HandleHealth();   // Deals with health and update UI and will reset level if health is <= 0
+
                 if (other.gameObject.transform.position.x > transform.position.x)
                 {
                     // Enemy is to my right therefore I should be damaged and move left
@@ -93,6 +109,17 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void HandleHealth()
+    {
+        health -= 1;
+        healthAmount.text = health.ToString();
+        if (health <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        }
+
+    }
     private void Movement()
     {
         float hDirection = Input.GetAxis("Horizontal");
@@ -162,5 +189,13 @@ public class PlayerController : MonoBehaviour
     private void FootStep()
     {
         footstep.Play();
+    }
+
+    private IEnumerator ResetPower()
+    {
+        yield return new WaitForSeconds(10);
+        GetComponent<SpriteRenderer>().color = Color.white;
+
+
     }
 }
